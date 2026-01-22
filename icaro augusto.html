@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>MY EGGS 17 ANOS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  :root{
+    --bg: #000;
+    --neon1: #ff0000;
+    --neon2: #ff5100;
+    --accent-grad: linear-gradient(90deg, var(--neon2), var(--neon1));
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html,body { height: 100%; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: #fff;
+    overflow: hidden;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* NEON */
+  h1, p {
+    text-shadow:
+      0 0 5px var(--neon1),
+      0 0 10px var(--neon1),
+      0 0 20px var(--neon2),
+      0 0 40px var(--neon2);
+  }
+
+  .carousel-wrap {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .container {
+    display: flex;
+    width: 600vw; /* 6 pages -> 6 * 100vw */
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+    will-change: transform;
+  }
+
+  .page {
+    width: 100vw;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    gap: 12px;
+  }
+
+  img.invite-photo {
+    max-width: 80%;
+    width: clamp(180px, 40vmin, 420px);
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 0 30px var(--neon1);
+  }
+
+  h1 { font-size: clamp(1.6rem, 4vw, 2.6rem); margin-bottom: 6px; }
+  p  { font-size: clamp(1rem, 2.2vw, 1.4rem); }
+
+  /* Buttons */
+  .controls {
+    display:flex;
+    gap:12px;
+    margin-top: 18px;
+    align-items:center;
+  }
+
+  button, .pill {
+    padding: 12px 22px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    color: white;
+    background: var(--accent-grad);
+    box-shadow: 0 0 18px var(--neon1);
+  }
+
+  button:active { transform: translateY(1px); }
+  button[aria-disabled="true"] { opacity: 0.48; cursor: default; transform: none; box-shadow: none; }
+
+  /* Prev button smaller */
+  .btn-prev { background: rgba(255,255,255,0.06); padding: 10px 14px; border-radius: 14px; }
+
+  /* Dots */
+  .dots {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 18px;
+    display:flex;
+    gap:8px;
+    z-index:4;
+  }
+  .dot {
+    width:10px; height:10px; border-radius:50%;
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 0 6px rgba(0,0,0,0.6);
+    cursor:pointer;
+  }
+  .dot.active {
+    background: var(--neon1);
+    box-shadow: 0 0 12px var(--neon1);
+  }
+
+  
+
+  /* Audio control */
+  .audio-toggle {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index:5;
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .audio-toggle button { padding: 8px 12px; border-radius: 14px; font-size:0.95rem; }
+
+  /* Accessibility helpers */
+  .sr-only {
+    position:absolute !important;
+    width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  /* Responsive small screens adjustments */
+  @media (max-width:420px){
+    .dots { bottom: 12px; gap:6px; }
+    .dot { width:9px; height:9px; }
+  }
+</style>
+</head>
+
+<body>
+
+  <div class="smoke" aria-hidden="true"></div>
+
+  <div class="carousel-wrap" role="region" aria-label="Convite MY EGGS 17 anos">
+    <div class="audio-toggle" id="audioToggle">
+      <button id="muteBtn" aria-pressed="false" title="Ativar / desativar música">▶︎ Música</button>
+    </div>
+
+    <div class="container" id="container" tabindex="0" aria-live="polite">
+      <!-- Página 1 -->
+      <section class="page" aria-labelledby="title1" aria-describedby="desc1">
+        <img src="foto.png" alt="Foto do convite" class="invite-photo" loading="lazy">
+        <h1 id="title1">🎉 MY EGGS 🎉</h1>
+        <p id="desc1">17 ANOS 🔥</p>
+        <div class="controls">
+          <button class="pill" id="enterBtn">Entrar no convite</button>
+        </div>
+      </section>
+
+      <!-- Página 2 -->
+      <section class="page" aria-labelledby="title2" aria-describedby="desc2">
+        <h1 id="title2">🍻 Bebidas</h1>
+        <p id="desc2">Haverá bebidas sem limites.</p>
+        <div class="controls">
+          <button class="btn-prev" id="prev2" aria-hidden="true" aria-disabled="true">◀︎</button>
+          <button class="pill" id="next2">Próximo</button>
+        </div>
+      </section>
+
+      <!-- Página 3 -->
+      <section class="page" aria-labelledby="title3" aria-describedby="desc3">
+        <h1 id="title3">📍 LOCAL</h1>
+        <p id="desc3">ARENA GRILL</p>
+        <div class="controls">
+          <button class="btn-prev" id="prev3">◀︎</button>
+          <button class="pill" id="next3">Próximo</button>
+        </div>
+      </section>
+
+      <!-- Página 4 -->
+      <section class="page" aria-labelledby="title4" aria-describedby="desc4">
+        <h1 id="title4">⏰ HORÁRIO</h1>
+        <p id="desc4">20 HORAS 25 de janeiro
+        </p>
+        <div class="controls">
+          <button class="btn-prev" id="prev4">◀︎</button>
+          <button class="pill" id="next4">Próximo</button>
+        </div>
+      </section>
+
+    
+      <!-- Página Final -->
+      <section class="page" aria-labelledby="title6" aria-describedby="desc6">
+        <img src="foto.png" alt="Foto do convite" class="invite-photo" loading="lazy">
+        <h1 id="title6">MY EGGS • 17 ANOS 🎂</h1>
+        <p id="desc6">Clique abaixo para confirmar presença</p>
+        <div class="controls">
+          <button class="btn-prev" id="prev6">◀︎</button>
+          <button class="pill" id="confirmBtn">✅ CONFIRMAR PRESENÇA</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="dots" id="dots" aria-hidden="false" role="tablist" aria-label="Navegar páginas">
+      <!-- dots generated by JS -->
+    </div>
+  </div>
+
+  <!-- Audio element (no autoplay to avoid mobile/blocking) -->
+  <audio id="bgAudio" loop preload="auto">
+    <source src="memories.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+  </audio>
+
+<script>
+  // Carousel logic
+  const container = document.getElementById('container');
+  const totalPages = container.children.length;
+  let page = 0;
+
+  // Elements
+  const enterBtn = document.getElementById('enterBtn');
+  const confirmBtn = document.getElementById('confirmBtn');
+  const dotsEl = document.getElementById('dots');
+
+  // Build dots
+  for (let i=0;i<totalPages;i++){
+    const d = document.createElement('button');
+    d.className = 'dot' + (i===0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Página ' + (i+1));
+    d.dataset.index = i;
+    d.addEventListener('click', ()=> goTo(parseInt(d.dataset.index)));
+    dotsEl.appendChild(d);
+  }
+
+  function update() {
+    container.style.transform = 'translateX(-' + (page * 100) + 'vw)';
+    Array.from(dotsEl.children).forEach((d, i) => {
+      d.classList.toggle('active', i===page);
+    });
+    // update aria for prev buttons
+    Array.from(document.querySelectorAll('.btn-prev')).forEach(btn => {
+      btn.setAttribute('aria-disabled', page===0 ? 'true' : 'false');
+    });
+    // focus management: make container focusable and announce
+    container.setAttribute('aria-label', 'Página ' + (page+1) + ' de ' + totalPages);
+  }
+
+  function goTo(idx){
+    page = Math.max(0, Math.min(totalPages-1, idx));
+    update();
+  }
+
+  // Next/prev wiring
+  document.querySelectorAll('[id^=next]').forEach((btn, i) => {
+    btn.addEventListener('click', ()=> goTo(page + 1));
+  });
+  document.querySelectorAll('[id^=prev]').forEach((btn) => {
+    btn.addEventListener('click', ()=> goTo(page - 1));
+  });
+
+  document.getElementById('enterBtn').addEventListener('click', ()=> goTo(1));
+  document.getElementById('confirmBtn').addEventListener('click', ()=> {
+    // open whatsapp link
+    window.location.href = 'https://chat.whatsapp.com/C50vgNEezqdAU2hp5pyxd9';
+  });
+
+  // Keyboard support
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goTo(page + 1);
+    if (e.key === 'ArrowLeft') goTo(page - 1);
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End') goTo(totalPages - 1);
+  });
+
+  // Basic swipe support for touch devices
+  let startX = null;
+  container.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+  }, {passive:true});
+  container.addEventListener('touchend', (e) => {
+    if (startX === null) return;
+    const dx = (e.changedTouches[0].clientX - startX);
+    if (Math.abs(dx) > 40) {
+      if (dx < 0) goTo(page + 1);
+      else goTo(page - 1);
+    }
+    startX = null;
+  });
+
+  // Audio controls (do NOT autoplay to respect mobile & UX)
+  const bgAudio = document.getElementById('bgAudio');
+  const muteBtn = document.getElementById('muteBtn');
+  let playing = false;
+
+  function updateAudioButton(){
+    muteBtn.textContent = playing ? '⏸︎ Pausar' : '▶︎ Música';
+    muteBtn.setAttribute('aria-pressed', String(playing));
+  }
+
+  muteBtn.addEventListener('click', async () => {
+    try {
+      if (!playing) {
+        await bgAudio.play();
+        playing = true;
+      } else {
+        bgAudio.pause();
+        playing = false;
+      }
+    } catch (err) {
+      // Autoplay blocked or error
+      console.warn('Erro ao tocar áudio:', err);
+      playing = false;
+    }
+    updateAudioButton();
+  });
+
+  // keep initial state (paused)
+  update();
+
+  // Expose goTo for debugging
+  window.goToInvitePage = goTo;
+</script>
+
+</body>
+</html>
